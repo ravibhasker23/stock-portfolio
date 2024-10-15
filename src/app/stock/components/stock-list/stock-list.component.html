@@ -1,0 +1,134 @@
+<div class="container mt-4">
+    <p class="lead mt-3">
+        Add Stock to your portfolio
+    </p>
+
+    <form [formGroup]="stockForm" (ngSubmit)="addStock()" >
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <div class="row py-2">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">Symbol</span>
+                            <input formControlName="vwdKey" id="symbol" type="text" class="form-control" aria-describedby="addon-wrapping">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row py-2">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">Contracts</span>
+                            <input formControlName="numberOfContracts" id="numberOfContracts" type="text" class="form-control" aria-describedby="addon-wrapping">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row py-2">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">Buy price</span>
+                            <input formControlName="buyValue" id="buyValue" type="text" class="form-control" aria-describedby="addon-wrapping">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="stockForm.invalid">Add stock</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                @if((stocks$ | async).length !== 0){
+                    <app-stock-portfolio-view [stocks]="stocks$ | async"></app-stock-portfolio-view>
+                  }
+            </div>
+        </div>
+    
+    </form>
+
+    
+    <div class="row mt-5">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <table class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">No. of contracts</th>
+                    <th scope="col">Bought</th>
+                    <th scope="col">Current value</th>
+                    <th scope="col">Yield(%)</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @if((stocks$ | async).length !== 0){
+                        @for(stock of (stocks$ | async); track stock.symbol; let idx = $index){
+                            <tr>
+                                <th scope="row">{{ idx + 1 }}</th>
+                                <td>{{ stock.vwdKey }}</td>
+                                <td>{{ stock.name }}</td>
+                                <td>{{ stock.price }}</td>
+                                <td>{{ stock.numberOfContracts }}</td>
+                                <td>{{ stock.buyValue | number: '1.2-2' }}</td>
+                                <td>{{ stock.currentValue | number: '1.2-2' }}</td>
+                                <td [ngClass]="stock.yield < 0 ? 'text-danger' : 'text-success'">{{ stock.yield | number: '1.2-2' }}%</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" (click)="removeStock(stock.vwdKey)">Remove</button>
+                                </td>
+                              </tr>
+                            }
+                              @if((stocks$ | async)){
+                                <tr>
+                                    <td colspan="5">
+                                        <small class="text-secondary">Total:</small>
+                                    </td>
+                                    <td>
+                                        <small class="text-secondary">
+                                           {{ (stocks$ | async) | total: 'buyValue' | number: '1.2-2' }}
+                                        </small> 
+                                    </td>
+                                    <td>
+                                        <small class="text-secondary">
+                                            {{ (stocks$ | async) | total: 'currentValue' | number: '1.2-2' }}
+                                        </small> 
+                                    </td>
+                                    <td colspan="2">
+                                        <small class="text-secondary">
+                                            {{ (stocks$ | async) | total: 'yield' | number: '1.2-2' }}%
+                                        </small> 
+                                    </td>
+                                  </tr>
+                              }
+                    }@else{
+                        <tr>
+                            <td colspan="10">
+                                <small class="text-secondary">Nothing added in your portfolio.</small>
+                            </td>
+                            
+                        </tr>
+                    }
+
+                    @if((loading$ | async)){
+                        <div>
+                            <div class="spinner-border spinner-border-sm" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+              </table>
+
+              @if((error$ | async)){
+                <small class="py-1 text-danger">
+                    {{ 'Unable to add at the moment. ' + (error$ | async).message }}
+                </small>
+              }
+        </div>
+    </div>
+</div>
