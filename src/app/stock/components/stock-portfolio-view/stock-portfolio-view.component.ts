@@ -53,9 +53,6 @@ export class StockPortfolioViewComponent implements OnChanges {
           type: 'pie',
         },
       ],
-      accessibility: {
-        enabled: false
-      }
     };
 
     data = currentData;
@@ -74,9 +71,6 @@ export class StockPortfolioViewComponent implements OnChanges {
           type: 'pie',
         },
       ],
-      accessibility: {
-        enabled: false
-      }
     };
   }
 }

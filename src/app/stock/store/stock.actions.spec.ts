@@ -1,4 +1,4 @@
-import { IAddStock, IError, IStock } from './stock-state.model';
+import { IAddStock, IError } from './stock-state.model';
 import * as stockActions from './stock.actions';
 
 describe('AddStock', () => {

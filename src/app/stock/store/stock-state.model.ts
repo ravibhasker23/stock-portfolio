@@ -1,15 +1,18 @@
 import { Action } from '@ngrx/store';
 
+//overall state
 export interface IStockSelectState {
   stock: IStockState;
 }
 
+//interface for add stock
 export interface IAddStock {
   vwdKey: string;
   numberOfContracts: number;
   buyValue: number;
 }
 
+// interface for displaying the values in the table
 export interface IStock {
   vwdKey: string;
   name: string;
@@ -21,6 +24,7 @@ export interface IStock {
   price: number;
 }
 
+//initial state of the reducer
 export interface IStockState {
   stocks: IStock[];
   error: string | null;

@@ -4,8 +4,6 @@ import { StoreModule, Store } from '@ngrx/store';
 import { StockListComponent } from './stock-list.component';
 import { IStockSelectState, Stock } from '../../store/stock-state.model';
 import { AddStock, RemoveStock, StockReducer } from '../../store';
-import { NL_STOCKS, US_STOCKS } from '../../constants/stock.data';
-import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('StockListComponent', () => {

@@ -10,16 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StockEffects, StockReducer } from './stock/store';
 import { StockService } from './stock/services/stock.service';
-
-// Define the routes for the application
-const routes: Routes = [
-  { path: '', redirectTo: '/stock', pathMatch: 'full' }, // Redirect root path to /stock
-  {
-    path: 'stock',
-    loadChildren: () =>
-      import('./stock/stock.module').then((m) => m.StockModule), // Lazy load the StockModule
-  },
-];
+import { routes } from './app.routes';
 
 @NgModule({
   declarations: [AppComponent],
