@@ -11,6 +11,28 @@
                         <div class="input-group flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Symbol</span>
                             <input formControlName="vwdKey" id="symbol" type="text" class="form-control" aria-describedby="addon-wrapping">
+
+<!--                           <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+      Select Stock
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <li class="dropdown-header">Dutch Stocks</li>
+      <li *ngFor="let stock of nlStocks">
+        <a class="dropdown-item" (click)="stockForm.controls['selectedStock'].setValue(stock.symbol)">
+          {{ stock.symbol }} - {{ stock.name }}
+        </a>
+      </li>
+      <li><hr class="dropdown-divider"></li>
+      <li class="dropdown-header">US Stocks</li>
+      <li *ngFor="let stock of usStocks">
+        <a class="dropdown-item" (click)="stockForm.controls['selectedStock'].setValue(stock.symbol)">
+          {{ stock.symbol }} - {{ stock.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <input type="hidden" formControlName="selectedStock"> -->
                         </div>
                     </div>
                 </div>
