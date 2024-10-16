@@ -1,16 +1,36 @@
-import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, forkJoin, Observable, throwError } from 'rxjs';
+import { IStock } from '../store/stock-state.model';
 
-import { StockService } from './stock.service';
+@Injectable({
+  providedIn: 'root',
+})
+export class StockService {
+  private stockEndpoint =
+    'https://test.solutions.vwdservices.com/internal/intake-test/sample-data/price-data?vwdkey=';
+  private exchangeRateEndpoint =
+    'https://test.solutions.vwdservices.com/internal/intake-test/sample-data/price-data?vwdkey=USDEUR.FXVWD';
 
-describe('StockService', () => {
-  let service: StockService;
+  constructor(private http: HttpClient) {}
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(StockService);
-  });
+  getStocksBySymbol(symbol: string): Observable<IStock[]> {
+    return this.http.get<IStock[]>(this.stockEndpoint + symbol).pipe(
+      catchError((error) => {
+        return throwError(error);
+      }),
+    );
+  }
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  getExchangeRate(): Observable<any[]> {
+    return this.http.get<any[]>(this.exchangeRateEndpoint).pipe(
+      catchError((error) => {
+        return throwError(error);
+      }),
+    );
+  }
+
+  normaliseToEur(amount: number, rate: number): number {
+    return amount * rate;
+  }
+}
