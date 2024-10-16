@@ -28,8 +28,8 @@ Below are the details on the packages used.
 
 ## How to run the development server
 
-Run `npm install` to install all the dependencies. `registry = https://registry.npmjs.org/`
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/stock`. The application will automatically reload if you change any of the source files.
+ - Run `npm install` to install all the dependencies. registry=`https://registry.npmjs.org/`
+ - Run `ng serve` for a dev server. Navigate to `http://localhost:4200/stock`. The application will automatically reload if you change any of the source files.
 
 ## Build
 
