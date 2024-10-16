@@ -17,7 +17,6 @@ export const NL_STOCKS: Stock[] = [
   { symbol: 'HEIA.NL', name: 'Heineken' },
   { symbol: 'INGA.NL', name: 'ING' },
   { symbol: 'KPN.NL', name: 'KPN' },
-  { symbol: 'ss.NL', name: 'ss' },
 ];
 
 export const US_STOCKS: Stock[] = [

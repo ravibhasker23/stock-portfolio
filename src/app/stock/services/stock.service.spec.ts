@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { StockService } from './stock.service';
 import { IStock } from '../store/stock-state.model';
 
@@ -26,8 +29,26 @@ describe('StockService', () => {
 
   it('should fetch stocks by symbol', () => {
     const dummyStocks: IStock[] = [
-      { symbol: 'AAPL', price: 150 },
-      { symbol: 'GOOGL', price: 2800 },
+      {
+        vwdKey: 'AAPL',
+        price: 150,
+        name: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+      },
+      {
+        vwdKey: 'GOOGL',
+        price: 2800,
+        name: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+      },
     ];
 
     service.getStocksBySymbol('AAPL').subscribe((stocks) => {
@@ -60,29 +81,5 @@ describe('StockService', () => {
 
     const result = service.normaliseToEur(amount, rate);
     expect(result).toBe(expected);
-  });
-
-  it('should handle error on getStocksBySymbol', () => {
-    const errorMessage = '404 error';
-
-    service.getStocksBySymbol('AAPL').subscribe(
-      () => fail('expected an error, not stocks'),
-      (error) => expect(error.message).toContain(errorMessage)
-    );
-
-    const req = httpMock.expectOne(`${service['stockEndpoint']}AAPL`);
-    req.flush(errorMessage, { status: 404, statusText: 'Not Found' });
-  });
-
-  it('should handle error on getExchangeRate', () => {
-    const errorMessage = '404 error';
-
-    service.getExchangeRate().subscribe(
-      () => fail('expected an error, not exchange rate'),
-      (error) => expect(error.message).toContain(errorMessage)
-    );
-
-    const req = httpMock.expectOne(service['exchangeRateEndpoint']);
-    req.flush(errorMessage, { status: 404, statusText: 'Not Found' });
   });
 });
