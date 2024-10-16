@@ -18,7 +18,6 @@ export function StockReducer(state = initState, action: IAction): IStockState {
       };
     }
     case ActionTypes.ADD_STOCKS_SUCCESS: {
-      console.log(action.payload);
       const existingStockIdx = state.stocks.findIndex(
         (s) => s.vwdKey === action.payload.stock.vwdKey,
       );

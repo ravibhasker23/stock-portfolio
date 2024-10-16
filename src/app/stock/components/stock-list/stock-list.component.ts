@@ -43,7 +43,6 @@ export class StockListComponent implements OnInit {
   }
 
   addStock(): void {
-    console.log('add');
     if (this.stockForm.valid) {
       const { vwdKey, numberOfContracts, buyValue } = this.stockForm.value;
       this.store.dispatch(
