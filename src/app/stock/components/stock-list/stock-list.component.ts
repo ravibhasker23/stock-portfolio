@@ -35,6 +35,7 @@ export class StockListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    //initializaing the form group
     this.stockForm = this.fb.group({
       vwdKey: ['', Validators.required],
       numberOfContracts: [null, [Validators.required, Validators.min(1)]],
@@ -42,6 +43,9 @@ export class StockListComponent implements OnInit {
     });
   }
 
+  //add stock fetches the form values and dispatches an action to add the stock.
+  //Based on the symbol/vwdKey the normalizing to EUR is calculated in the effects.
+  //Also checks for existing stock value and updates the stocks array if exists
   addStock(): void {
     if (this.stockForm.valid) {
       const { vwdKey, numberOfContracts, buyValue } = this.stockForm.value;
@@ -57,10 +61,12 @@ export class StockListComponent implements OnInit {
     }
   }
 
+  //Remove stock dispatches an action to remove the stock based on the symbol and update the stocks
   removeStock(symbol: string) {
     this.store.dispatch(new RemoveStock(symbol));
   }
 
+  //Selected value to be displayed in the dropdown.
   onSelectStock(stock: Stock) {
     this.stockForm.controls['vwdKey'].setValue(stock.symbol);
     this.selectedStockSymbol = `${stock.symbol}`;

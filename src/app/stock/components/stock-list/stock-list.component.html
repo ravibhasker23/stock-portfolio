@@ -1,6 +1,7 @@
 <div class="container mt-4">
   <p class="lead mt-3">Add Stock to your portfolio</p>
 
+  <!-- Stock form start for adding a new stock to the portfolio start -->
   <form [formGroup]="stockForm" (ngSubmit)="addStock()">
     <div class="row">
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -122,16 +123,20 @@
         </div>
       </div>
     </div>
-
-    <div class="row display">
-      @if ((stocks$ | async).length !== 0) {
-        <app-stock-portfolio-view
-          [stocks]="stocks$ | async"
-        ></app-stock-portfolio-view>
-      }
-    </div>
   </form>
 
+  <!-- Stock portfolio view for the bought and current values w.r.t stock name start -->
+  <div class="row display">
+    @if ((stocks$ | async).length !== 0) {
+      <app-stock-portfolio-view
+        [stocks]="stocks$ | async"
+      ></app-stock-portfolio-view>
+    }
+  </div>
+  <!-- Stock portfolio view for the bought and current values w.r.t stock name end -->
+  <!-- Stock form start for adding a new stock to the portfolio end -->
+
+  <!-- Stock portfolio table view with remove option start. All the prices are normalized to EUR in case of a US stock exchange. -->
   <div class="row mt-5">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <table class="table table-responsive">
@@ -188,11 +193,13 @@
                   <small class="text-secondary">Total:</small>
                 </td>
                 <td>
+                  <!-- total pipe for calculating total buyValue -->
                   <small class="text-secondary">
                     {{ stocks$ | async | total: "buyValue" | number: "1.2-2" }}
                   </small>
                 </td>
                 <td>
+                  <!-- total pipe for calculating total currentValue -->
                   <small class="text-secondary">
                     {{
                       stocks$ | async | total: "currentValue" | number: "1.2-2"
@@ -200,6 +207,7 @@
                   </small>
                 </td>
                 <td colspan="2">
+                  <!-- total pipe for calculating total yield -->
                   <small class="text-secondary">
                     @if (
                       (stocks$ | async) &&
@@ -215,6 +223,7 @@
           } @else {
             <tr>
               <td colspan="10">
+                <!-- If there are no stocks added in the portfolio -->
                 <small class="text-secondary"
                   >Nothing added in your portfolio.</small
                 >
@@ -233,10 +242,12 @@
       </table>
 
       @if (error$ | async) {
+        <!-- Error message in case the endpoint throws an error while adding a stock. -->
         <small class="py-1 text-danger">
           {{ error$ | async }}
         </small>
       }
     </div>
   </div>
+  <!-- Stock portfolio table view with remove option end -->
 </div>

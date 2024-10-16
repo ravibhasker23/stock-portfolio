@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StockPortfolioViewComponent } from './stock-portfolio-view.component';
-import { TotalPipe } from '../../pipes/total.pipe';
 import { IStock } from '../../store/stock-state.model';
 import * as Highcharts from 'highcharts';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -12,7 +11,6 @@ describe('StockPortfolioViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StockPortfolioViewComponent],
-      providers: [TotalPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 

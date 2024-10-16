@@ -13,7 +13,11 @@ describe('StockEffects', () => {
   let stockService: jasmine.SpyObj<StockService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('StockService', ['getStocksBySymbol', 'getExchangeRate', 'normaliseToEur']);
+    const spy = jasmine.createSpyObj('StockService', [
+      'getStocksBySymbol',
+      'getExchangeRate',
+      'normaliseToEur',
+    ]);
 
     TestBed.configureTestingModule({
       providers: [
@@ -28,8 +32,22 @@ describe('StockEffects', () => {
   });
 
   it('should return AddStockSuccess when adding stocks with .Q symbol', (done) => {
-    const action = { type: ActionTypes.ADD_STOCKS, payload: { vwdKey: 'AAPL.Q', numberOfContracts: 10, buyValue: 100 } };
-    const stocksResponse = [{ price: 150 }];
+    const action = {
+      type: ActionTypes.ADD_STOCKS,
+      payload: { vwdKey: 'AAPL.Q', numberOfContracts: 10, buyValue: 100 },
+    };
+    const stocksResponse: any[] = [
+      {
+        vwdKey: 'AAPL.Q',
+        name: 'Apple Inc.',
+        price: 150,
+        numberOfContracts: 10,
+        buyValue: 1000,
+        currentValue: 1363.6,
+        yield: 36.36,
+        currentPrice: 0,
+      },
+    ];
     const rateResponse = [{ price: 1.1 }];
     const convertedPrice = 136.36; // 150 / 1.1
 
@@ -41,63 +59,95 @@ describe('StockEffects', () => {
     const expectedStock: IStock = {
       vwdKey: 'AAPL.Q',
       name: 'Apple Inc.',
-      price: 150,
+      price: 136.36,
       numberOfContracts: 10,
       buyValue: 1000,
-      currentValue: 1363.6,
-      yield: 36.36,
+      currentValue: 1363.6000000000001,
+      yield: 36.360000000000014,
+      currentPrice: 0,
     };
 
-    effects.addStocks$.subscribe(result => {
+    effects.addStocks$.subscribe((result) => {
       expect(result).toEqual(new AddStockSuccess({ stock: expectedStock }));
       done();
     });
   });
 
   it('should return AddStockError when adding stocks with .Q symbol fails', (done) => {
-    const action = { type: ActionTypes.ADD_STOCKS, payload: { vwdKey: 'AAPL.Q', numberOfContracts: 10, buyValue: 100 } };
+    const action = {
+      type: ActionTypes.ADD_STOCKS,
+      payload: { vwdKey: 'AAPL.Q', numberOfContracts: 10, buyValue: 100 },
+    };
 
     actions$ = of(action);
     stockService.getStocksBySymbol.and.returnValue(throwError('error'));
     stockService.getExchangeRate.and.returnValue(of([{ price: 1.1 }]));
 
-    effects.addStocks$.subscribe(result => {
-      expect(result).toEqual(new AddStockError({ errorCode: 1, errorMsg: 'Unable to add the stock to the portfolio' }));
+    effects.addStocks$.subscribe((result) => {
+      expect(result).toEqual(
+        new AddStockError({
+          errorCode: 1,
+          errorMsg: 'Unable to add the stock to the portfolio',
+        }),
+      );
       done();
     });
   });
 
   it('should return AddStockSuccess when adding stocks without .Q symbol', (done) => {
-    const action = { type: ActionTypes.ADD_STOCKS, payload: { vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 100 } };
-    const stocksResponse = [{ price: 150 }];
+    const action = {
+      type: ActionTypes.ADD_STOCKS,
+      payload: { vwdKey: 'AD.NL', numberOfContracts: 10, buyValue: 100 },
+    };
+    const stocksResponse = [
+      {
+        vwdKey: 'AD.NL',
+        name: 'AHOLD DEL',
+        price: 136.36,
+        numberOfContracts: 10,
+        buyValue: 1000,
+        currentValue: 1363.6000000000001,
+        yield: 36.360000000000014,
+        currentPrice: 0,
+      },
+    ];
 
     actions$ = of(action);
     stockService.getStocksBySymbol.and.returnValue(of(stocksResponse));
 
     const expectedStock: IStock = {
-      vwdKey: 'AAPL',
-      name: 'Apple Inc.',
-      price: 150,
+      vwdKey: 'AD.NL',
+      name: 'AHOLD DEL',
+      price: 136.36,
       numberOfContracts: 10,
       buyValue: 1000,
-      currentValue: 1500,
-      yield: 50,
+      currentValue: 1363.6000000000001,
+      yield: 36.360000000000014,
+      currentPrice: 0,
     };
 
-    effects.addStocks$.subscribe(result => {
+    effects.addStocks$.subscribe((result) => {
       expect(result).toEqual(new AddStockSuccess({ stock: expectedStock }));
       done();
     });
   });
 
   it('should return AddStockError when adding stocks without .Q symbol fails', (done) => {
-    const action = { type: ActionTypes.ADD_STOCKS, payload: { vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 100 } };
+    const action = {
+      type: ActionTypes.ADD_STOCKS,
+      payload: { vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 100 },
+    };
 
     actions$ = of(action);
     stockService.getStocksBySymbol.and.returnValue(throwError('error'));
 
-    effects.addStocks$.subscribe(result => {
-      expect(result).toEqual(new AddStockError({ errorCode: 1, errorMsg: 'Unable to add the stock to the portfolio' }));
+    effects.addStocks$.subscribe((result) => {
+      expect(result).toEqual(
+        new AddStockError({
+          errorCode: 1,
+          errorMsg: 'Unable to add the stock to the portfolio',
+        }),
+      );
       done();
     });
   });

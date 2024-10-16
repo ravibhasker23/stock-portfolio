@@ -14,6 +14,7 @@ export class StockService {
 
   constructor(private http: HttpClient) {}
 
+  //fetches the data for stocks based on symbol
   getStocksBySymbol(symbol: string): Observable<IStock[]> {
     return this.http.get<IStock[]>(this.stockEndpoint + symbol).pipe(
       catchError((error) => {
@@ -22,6 +23,7 @@ export class StockService {
     );
   }
 
+  //fetches the data for stocks based on exhange rate
   getExchangeRate(): Observable<any[]> {
     return this.http.get<any[]>(this.exchangeRateEndpoint).pipe(
       catchError((error) => {
@@ -30,6 +32,7 @@ export class StockService {
     );
   }
 
+  //USD to EUR conversion
   normaliseToEur(amount: number, rate: number): number {
     return amount * rate;
   }

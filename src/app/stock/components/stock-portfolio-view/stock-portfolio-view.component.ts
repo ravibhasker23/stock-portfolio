@@ -1,13 +1,11 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { IStock } from '../../store/stock-state.model';
 import * as Highcharts from 'highcharts';
-import { TotalPipe } from '../../pipes/total.pipe';
 
 @Component({
   selector: 'app-stock-portfolio-view',
   templateUrl: './stock-portfolio-view.component.html',
   styleUrl: './stock-portfolio-view.component.scss',
-  providers: [TotalPipe],
 })
 export class StockPortfolioViewComponent implements OnChanges {
   @Input()
@@ -19,13 +17,15 @@ export class StockPortfolioViewComponent implements OnChanges {
 
   currentChartOptions: Highcharts.Options = {};
 
-  constructor(private totalPipe: TotalPipe) {}
+  constructor() {}
 
+  // Stocks value updated in case of a new addition or removal. This updates chart based on the new values of stocks.
   ngOnChanges(): void {
     this.updateChart();
   }
 
   updateChart() {
+    //preparing the data
     const boughtData = this.stocks.map((el) => ({
       name: el.name,
       y: Number(el.buyValue.toFixed(2)),
@@ -38,6 +38,7 @@ export class StockPortfolioViewComponent implements OnChanges {
 
     let data = boughtData;
 
+    //preparing the chart options
     this.chartOptions = {
       chart: {
         type: 'pie',

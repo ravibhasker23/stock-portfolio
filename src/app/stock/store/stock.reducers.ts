@@ -1,7 +1,7 @@
 import { ActionTypes } from './stock.actions';
 import { IAction, IStockState } from './stock-state.model';
 
-//Initial state
+//Initial state of the stock reducer
 export const initState: IStockState = {
   loading: false,
   error: null,
@@ -18,6 +18,7 @@ export function StockReducer(state = initState, action: IAction): IStockState {
       };
     }
     case ActionTypes.ADD_STOCKS_SUCCESS: {
+      //check if stock already exists in the stocks array using the vwdKey
       const existingStockIdx = state.stocks.findIndex(
         (s) => s.vwdKey === action.payload.stock.vwdKey,
       );
@@ -44,6 +45,7 @@ export function StockReducer(state = initState, action: IAction): IStockState {
           yield: yieldValue,
         };
 
+        //if exists updates the existing stock with the new values
         const updatedStocks = [
           ...state.stocks.slice(0, existingStockIdx),
           updatedStock,
@@ -57,6 +59,7 @@ export function StockReducer(state = initState, action: IAction): IStockState {
           stocks: updatedStocks,
         };
       } else {
+        //else adds a new stock in the stock array
         return {
           ...state,
           loading: false,
@@ -65,6 +68,7 @@ export function StockReducer(state = initState, action: IAction): IStockState {
         };
       }
     }
+    //Handling error and fetching the proper error message
     case ActionTypes.ADD_STOCKS_ERROR: {
       return {
         ...state,
@@ -72,6 +76,7 @@ export function StockReducer(state = initState, action: IAction): IStockState {
         error: action.payload.errorMsg,
       };
     }
+    //Removes the stock from the stocks array matches with vwdKey
     case ActionTypes.REMOVE_STOCK: {
       return {
         ...state,
