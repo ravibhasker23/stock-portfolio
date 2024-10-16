@@ -1,3 +1,6 @@
+// This file defines two arrays of stock objects: NL_STOCKS and US_STOCKS.
+// Each array contains a list of stocks with their respective symbols and names.
+
 import { Stock } from '../store/stock-state.model';
 
 export const NL_STOCKS: Stock[] = [
