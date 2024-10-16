@@ -8,10 +8,7 @@ export const initState: IStockState = {
   stocks: [],
 };
 
-export function StockReducer(
-  state = initState,
-  action: IAction,
-): IStockState {
+export function StockReducer(state = initState, action: IAction): IStockState {
   switch (action.type) {
     case ActionTypes.ADD_STOCKS: {
       return {
@@ -22,15 +19,23 @@ export function StockReducer(
     }
     case ActionTypes.ADD_STOCKS_SUCCESS: {
       console.log(action.payload);
-      const existingStockIdx = state.stocks.findIndex(s => s.vwdKey === action.payload.stock.vwdKey);
+      const existingStockIdx = state.stocks.findIndex(
+        (s) => s.vwdKey === action.payload.stock.vwdKey,
+      );
 
-      if(existingStockIdx !== -1){
+      if (existingStockIdx !== -1) {
         const existingStock = state.stocks[existingStockIdx];
-        const totalContracts = existingStock.numberOfContracts + action.payload.stock.numberOfContracts;
-        const totalBuyValue = (existingStock.buyValue * existingStock.numberOfContracts) + (action.payload.stock.buyValue * action.payload.stock.numberOfContracts);
+        const totalContracts =
+          existingStock.numberOfContracts +
+          action.payload.stock.numberOfContracts;
+        const totalBuyValue =
+          existingStock.buyValue * existingStock.numberOfContracts +
+          action.payload.stock.buyValue *
+            action.payload.stock.numberOfContracts;
         const avgBuyValue = totalBuyValue / totalContracts;
         const currentValue = existingStock.price * totalContracts;
-        const yieldValue = (( currentValue - totalBuyValue) / totalBuyValue) * 100;
+        const yieldValue =
+          ((currentValue - totalBuyValue) / totalBuyValue) * 100;
 
         const updatedStock = {
           ...existingStock,
@@ -38,12 +43,12 @@ export function StockReducer(
           buyValue: avgBuyValue,
           currentValue: currentValue,
           yield: yieldValue,
-        }
+        };
 
         const updatedStocks = [
           ...state.stocks.slice(0, existingStockIdx),
           updatedStock,
-          ...state.stocks.slice(existingStockIdx + 1)
+          ...state.stocks.slice(existingStockIdx + 1),
         ];
 
         return {
@@ -51,8 +56,8 @@ export function StockReducer(
           loading: false,
           error: null,
           stocks: updatedStocks,
-        }
-      }else{
+        };
+      } else {
         return {
           ...state,
           loading: false,
@@ -65,14 +70,14 @@ export function StockReducer(
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.errorMsg,
       };
     }
     case ActionTypes.REMOVE_STOCK: {
       return {
         ...state,
         loading: false,
-        stocks: state.stocks.filter(stock => stock.vwdKey !== action.payload),
+        stocks: state.stocks.filter((stock) => stock.vwdKey !== action.payload),
         error: null,
       };
     }

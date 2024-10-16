@@ -8,9 +8,7 @@ import { TotalPipe } from './pipes/total.pipe';
 import { StockPortfolioViewComponent } from './components/stock-portfolio-view/stock-portfolio-view.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 
-const routes: Routes = [
-  { path: '', component: StockComponent }
-];
+const routes: Routes = [{ path: '', component: StockComponent }];
 
 @NgModule({
   declarations: [
@@ -23,8 +21,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class StockModule { }
+export class StockModule {}

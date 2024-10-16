@@ -12,14 +12,16 @@ import { StockEffects, StockReducer } from './stock/store';
 import { StockService } from './stock/services/stock.service';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/stock', pathMatch: 'full'},
-  {path: 'stock', loadChildren: ()=> import('./stock/stock.module').then(m => m.StockModule)},
-]
+  { path: '', redirectTo: '/stock', pathMatch: 'full' },
+  {
+    path: 'stock',
+    loadChildren: () =>
+      import('./stock/stock.module').then((m) => m.StockModule),
+  },
+];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -27,7 +29,7 @@ const routes: Routes = [
     EffectsModule.forRoot([StockEffects]),
     FormsModule,
     RouterModule.forRoot(routes),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [provideAnimationsAsync(), StockService],
   bootstrap: [AppComponent],

@@ -8,10 +8,9 @@ describe('StockListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StockListComponent]
-    })
-    .compileComponents();
-    
+      imports: [StockListComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(StockListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -7,68 +7,69 @@ import { TotalPipe } from '../../pipes/total.pipe';
   selector: 'app-stock-portfolio-view',
   templateUrl: './stock-portfolio-view.component.html',
   styleUrl: './stock-portfolio-view.component.scss',
-  providers: [TotalPipe]
+  providers: [TotalPipe],
 })
 export class StockPortfolioViewComponent implements OnChanges {
-
   @Input()
   stocks!: IStock[];
-  
+
   Highcharts: typeof Highcharts = Highcharts;
 
   chartOptions: Highcharts.Options = {};
 
   currentChartOptions: Highcharts.Options = {};
 
-  constructor(private totalPipe: TotalPipe){}
+  constructor(private totalPipe: TotalPipe) {}
 
   ngOnChanges(): void {
     this.updateChart();
   }
 
-  updateChart(){
-    const totalBuyValue = this.totalPipe.transform(this.stocks, 'buyValue');
-    const totalCurrentValue = this.totalPipe.transform(this.stocks, 'currentValue');
+  updateChart() {
+    const boughtData = this.stocks.map((el) => ({
+      name: el.name,
+      y: Number(el.buyValue.toFixed(2)),
+    }));
 
-    let data: { name: string; y: number; }[] = [];
-    let data2: { name: string; y: number; }[] = [];
-    this.stocks.forEach(element => {
-      data.push({
-        name: element.name, y: Number(element.buyValue.toFixed(2))
-      });
-      data2.push({
-        name: element.name, y: Number(element.currentValue.toFixed(2))
-      });
-    });
+    const currentData = this.stocks.map((el) => ({
+      name: el.name,
+      y: Number(el.currentValue.toFixed(2)),
+    }));
+
+    let data = boughtData;
 
     this.chartOptions = {
       chart: {
-        type: 'pie'
-      },
-      title:{
-        text: 'Portfolio element values',
-      },
-      series: [{
-        name: 'Bought',
-        data,
         type: 'pie',
-      }]
-    }
+      },
+      title: {
+        text: 'Bought values',
+      },
+      series: [
+        {
+          name: 'Bought',
+          data,
+          type: 'pie',
+        },
+      ],
+    };
 
-    data = [];
-    data = data2;
+    data = currentData;
+
     this.currentChartOptions = {
       chart: {
-        type: 'pie'
-      },
-      title:{
-        text: 'Portfolio element values',
-      },
-      series: [{
-        name: 'Current',
-        data,
         type: 'pie',
-      }]
-    }
+      },
+      title: {
+        text: 'Current values',
+      },
+      series: [
+        {
+          name: 'Current',
+          data,
+          type: 'pie',
+        },
+      ],
+    };
   }
 }

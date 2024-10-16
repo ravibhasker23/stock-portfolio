@@ -5,9 +5,7 @@ import { IStock } from '../store/stock-state.model';
   name: 'total',
 })
 export class TotalPipe implements PipeTransform {
-
   transform(stocks: IStock[], field: keyof IStock): number {
     return stocks.reduce((total, stock) => total + (stock[field] as number), 0);
   }
-
 }

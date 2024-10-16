@@ -1,9 +1,4 @@
-import {
-  IAction,
-  IAddStock,
-  IError,
-  IStock,
-} from './stock-state.model';
+import { IAction, IAddStock, IError, IStock } from './stock-state.model';
 
 export enum ActionTypes {
   ADD_STOCKS = '[STOCK] Add stocks',
@@ -14,12 +9,12 @@ export enum ActionTypes {
 
 export class AddStock implements IAction {
   readonly type: ActionTypes = ActionTypes.ADD_STOCKS;
-  constructor(public payload: any){}
+  constructor(public payload: any) {}
 }
 
 export class AddStockSuccess implements IAction {
   readonly type: ActionTypes = ActionTypes.ADD_STOCKS_SUCCESS;
-  constructor(public payload: { stock:  IStock }) {}
+  constructor(public payload: { stock: IStock }) {}
 }
 
 export class AddStockError implements IAction {
@@ -29,5 +24,5 @@ export class AddStockError implements IAction {
 
 export class RemoveStock implements IAction {
   readonly type: ActionTypes = ActionTypes.REMOVE_STOCK;
-  constructor(public payload: string){}
+  constructor(public payload: string) {}
 }
