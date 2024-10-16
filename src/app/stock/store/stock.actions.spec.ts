@@ -1,25 +1,35 @@
-import { ICourse, ICourseResponse, IError } from './stock-state.model';
-import * as lmsDashboardActions from './stock.actions';
+import { IAddStock, IError, IStock } from './stock-state.model';
+import * as stockActions from './stock.actions';
 
-describe('FetchInitCourses', () => {
-  it('should initite the courses', () => {
-    const action = new lmsDashboardActions.FetchInitCourses();
-    expect(action.type).toBe(
-      lmsDashboardActions.ActionTypes.FETCH_INIT_COURSES,
-    );
+describe('AddStock', () => {
+  it('should add the stocks', () => {
+    const payload: IAddStock = {
+      vwdKey: '',
+      numberOfContracts: 0,
+      buyValue: 0,
+    };
+    const action = new stockActions.AddStock(payload);
+    expect(action.type).toBe(stockActions.ActionTypes.ADD_STOCKS);
   });
 });
 
-describe('FetchInitCoursesSuccess', () => {
+describe('AddStockSuccess', () => {
   it('should call success when effect is complete', () => {
-    const payload: ICourseResponse = {
-      courses: [],
-      lastUpdated: '',
-      totalCourses: [],
+    const payload = {
+      stock: {
+        vwdKey: '',
+        name: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+        price: 0,
+      },
     };
-    const action = new lmsDashboardActions.FetchInitCoursesSuccess(payload);
+    const action = new stockActions.AddStockSuccess(payload);
     expect(action.type).toBe(
-      lmsDashboardActions.ActionTypes.FETCH_INIT_COURSES_SUCCESS,
+      stockActions.ActionTypes.ADD_STOCKS_SUCCESS,
       payload,
     );
 
@@ -27,15 +37,15 @@ describe('FetchInitCoursesSuccess', () => {
   });
 });
 
-describe('FetchInitCoursesError', () => {
+describe('AddStockError', () => {
   it('should call error when effect has error', () => {
     const payload: IError = {
       errorMsg: '',
-      errorCode: '',
+      errorCode: 0,
     };
-    const action = new lmsDashboardActions.FetchInitCoursesError(payload);
+    const action = new stockActions.AddStockError(payload);
     expect(action.type).toBe(
-      lmsDashboardActions.ActionTypes.FETCH_INIT_COURSES_ERROR,
+      stockActions.ActionTypes.ADD_STOCKS_ERROR,
       payload,
     );
 
@@ -43,27 +53,11 @@ describe('FetchInitCoursesError', () => {
   });
 });
 
-describe('SetUpdatedCourses', () => {
-  it('should call SetUpdatedCourses for storing user inputs', () => {
-    const payload: ICourse[] = [];
-    const action = new lmsDashboardActions.SetUpdatedCourses(payload);
-    expect(action.type).toBe(
-      lmsDashboardActions.ActionTypes.SET_UPDATED_COURSES,
-      payload,
-    );
-
-    expect(action.payload).toEqual(payload);
-  });
-});
-
-describe('RefreshLastUpdated', () => {
-  it('should call RefreshLastUpdated for storing user inputs', () => {
+describe('RemoveStock', () => {
+  it('should call RemoveStock for storing user inputs', () => {
     const payload: string = '';
-    const action = new lmsDashboardActions.RefreshLastUpdated(payload);
-    expect(action.type).toBe(
-      lmsDashboardActions.ActionTypes.REFRESH_LAST_UPDATED,
-      payload,
-    );
+    const action = new stockActions.RemoveStock(payload);
+    expect(action.type).toBe(stockActions.ActionTypes.REMOVE_STOCK, payload);
 
     expect(action.payload).toEqual(payload);
   });

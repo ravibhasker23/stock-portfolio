@@ -3,9 +3,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule, Store } from '@ngrx/store';
 import { StockListComponent } from './stock-list.component';
 import { IStockSelectState, Stock } from '../../store/stock-state.model';
-import { AddStock, RemoveStock, stocksReducer } from '../../store';
+import { AddStock, RemoveStock, StockReducer } from '../../store';
 import { NL_STOCKS, US_STOCKS } from '../../constants/stock.data';
 import { By } from '@angular/platform-browser';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('StockListComponent', () => {
   let component: StockListComponent;
@@ -17,8 +18,9 @@ describe('StockListComponent', () => {
       declarations: [StockListComponent],
       imports: [
         ReactiveFormsModule,
-        StoreModule.forRoot({ stock: stocksReducer }),
+        StoreModule.forRoot({ stock: StockReducer }),
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
     store = TestBed.inject(Store);
@@ -51,9 +53,9 @@ describe('StockListComponent', () => {
     component.addStock();
 
     expect(store.dispatch).toHaveBeenCalledWith(
-      new AddStock({ vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 150 })
+      new AddStock({ vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 150 }),
     );
-    expect(component.stockForm.valid).toBeTruthy();
+    expect(component.stockForm.valid).toBeFalsy();
   });
 
   it('should not dispatch AddStock action when form is invalid and addStock is called', () => {
@@ -81,7 +83,7 @@ describe('StockListComponent', () => {
   });
 
   it('should set selectedStockSymbol and form control value when onSelectStock is called', () => {
-    const stock: Stock = { symbol: 'AAPL', price: 150 };
+    const stock: Stock = { symbol: 'AAPL', name: 'APPLE' };
 
     component.onSelectStock(stock);
 

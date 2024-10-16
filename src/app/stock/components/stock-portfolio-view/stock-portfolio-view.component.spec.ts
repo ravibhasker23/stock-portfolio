@@ -3,6 +3,7 @@ import { StockPortfolioViewComponent } from './stock-portfolio-view.component';
 import { TotalPipe } from '../../pipes/total.pipe';
 import { IStock } from '../../store/stock-state.model';
 import * as Highcharts from 'highcharts';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('StockPortfolioViewComponent', () => {
   let component: StockPortfolioViewComponent;
@@ -12,6 +13,7 @@ describe('StockPortfolioViewComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [StockPortfolioViewComponent],
       providers: [TotalPipe],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(StockPortfolioViewComponent);
@@ -25,19 +27,42 @@ describe('StockPortfolioViewComponent', () => {
 
   it('should update chart options on input change', () => {
     const stocks: IStock[] = [
-      { name: 'AAPL', buyValue: 150, currentValue: 160 },
-      { name: 'GOOGL', buyValue: 2800, currentValue: 2900 },
+      {
+        name: 'AAPL',
+        buyValue: 150,
+        currentValue: 160,
+        vwdKey: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        yield: 0,
+        price: 0,
+      },
+      {
+        name: 'GOOGL',
+        buyValue: 2800,
+        currentValue: 2900,
+        vwdKey: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        yield: 0,
+        price: 0,
+      },
     ];
 
     component.stocks = stocks;
     component.ngOnChanges();
 
-    expect(component.chartOptions.series.data).toEqual([
+    const chartOptionSeries = component.chartOptions
+      .series as Highcharts.SeriesPieOptions[];
+    const currentChartOptionSeries = component.currentChartOptions
+      .series as Highcharts.SeriesPieOptions[];
+
+    expect(chartOptionSeries[0].data).toEqual([
       { name: 'AAPL', y: 150 },
       { name: 'GOOGL', y: 2800 },
     ]);
 
-    expect(component.currentChartOptions.series.data).toEqual([
+    expect(currentChartOptionSeries[0].data).toEqual([
       { name: 'AAPL', y: 160 },
       { name: 'GOOGL', y: 2900 },
     ]);
@@ -45,8 +70,26 @@ describe('StockPortfolioViewComponent', () => {
 
   it('should set chart options correctly in updateChart method', () => {
     const stocks: IStock[] = [
-      { name: 'AAPL', buyValue: 150, currentValue: 160 },
-      { name: 'GOOGL', buyValue: 2800, currentValue: 2900 },
+      {
+        name: 'AAPL',
+        buyValue: 150,
+        currentValue: 160,
+        vwdKey: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        yield: 0,
+        price: 0,
+      },
+      {
+        name: 'GOOGL',
+        buyValue: 2800,
+        currentValue: 2900,
+        vwdKey: '',
+        currentPrice: 0,
+        numberOfContracts: 0,
+        yield: 0,
+        price: 0,
+      },
     ];
 
     component.stocks = stocks;

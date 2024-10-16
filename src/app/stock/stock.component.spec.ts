@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StockComponent } from './stock.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('StockComponent', () => {
   let component: StockComponent;
@@ -9,6 +10,7 @@ describe('StockComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StockComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(StockComponent);

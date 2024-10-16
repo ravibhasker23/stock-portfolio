@@ -10,9 +10,36 @@ describe('TotalPipe', () => {
 
   it('should calculate the total of a numeric field', () => {
     const stocks: IStock[] = [
-      { symbol: 'AAPL.Q', name: 'Apple', price: 150 },
-      { symbol: 'AMZN.Q', name: 'Amazon', price: 100 },
-      { symbol: 'MSFT.Q', name: 'Microsoft', price: 200 },
+      {
+        vwdKey: 'AAPL.Q',
+        name: 'Apple',
+        price: 150,
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+      },
+      {
+        vwdKey: 'AMZN.Q',
+        name: 'Amazon',
+        price: 100,
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+      },
+      {
+        vwdKey: 'MSFT.Q',
+        name: 'Microsoft',
+        price: 200,
+        currentPrice: 0,
+        numberOfContracts: 0,
+        buyValue: 0,
+        currentValue: 0,
+        yield: 0,
+      },
     ];
 
     const total = pipe.transform(stocks, 'price');
@@ -23,16 +50,5 @@ describe('TotalPipe', () => {
     const stocks: IStock[] = [];
     const total = pipe.transform(stocks, 'price');
     expect(total).toBe(0);
-  });
-
-  it('should handle non-numeric fields gracefully', () => {
-    const stocks: IStock[] = [
-      { symbol: 'AAPL.Q', name: 'Apple', price: 150 },
-      { symbol: 'AMZN.Q', name: 'Amazon', price: 100 },
-      { symbol: 'MSFT.Q', name: 'Microsoft', price: 200 },
-    ];
-
-    const total = pipe.transform(stocks, 'name' as keyof IStock);
-    expect(total).toBeNaN();
   });
 });

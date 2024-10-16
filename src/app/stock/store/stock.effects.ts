@@ -14,51 +14,6 @@ export class StockEffects {
     private _stockService: StockService,
   ) {}
 
-  // public addStocks$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(ActionTypes.ADD_STOCKS),
-  //     mergeMap((action: { payload: IStock}) => {
-  //       const symbol = action.payload.vwdKey;
-  //       const isUsdStock = symbol.endsWith('.Q');
-  //       if(isUsdStock){
-  //         return forkJoin({
-  //           stocks: this._stockService.getStocksBySymbol(symbol),
-  //           rate: this._stockService.getExchangeRate()
-  //         }).pipe(
-  //           map(({ stocks, rate }) =>{
-  //             const updatedPrice = this._stockService.normaliseToEur(stocks[0].price, rate[0].price);
-
-  //             const updatedStock: IStock = {
-  //               ...stocks[0],
-  //               price: updatedPrice,
-  //               numberOfContracts: Number(action.payload.numberOfContracts),
-  //               buyValue: Number(action.payload.buyValue) * action.payload.numberOfContracts,
-  //               currentValue: updatedPrice * action.payload.numberOfContracts,
-  //               yield: (updatedPrice - Number(action.payload.buyValue))/ Number(action.payload.buyValue) * 100
-  //             };
-  //             return new AddStockSuccess({stock: updatedStock});
-  //           })
-  //         );
-  //       }else{
-  //         return this._stockService.getStocksBySymbol(symbol).pipe(
-  //           map((response) => {
-  //             const updatedStock: IStock = {
-  //               ...response[0],
-  //               numberOfContracts: Number(action.payload.numberOfContracts),
-  //               buyValue: Number(action.payload.buyValue) * action.payload.numberOfContracts,
-  //               currentValue: response[0].price * action.payload.numberOfContracts,
-  //               yield: (response[0].price - Number(action.payload.buyValue))/ Number(action.payload.buyValue) * 100
-  //             }
-  //             return new AddStockSuccess({stock: updatedStock});
-  //           }),
-  //           catchError((error) => of(new AddStockError(error))),
-  //         );
-  //       }
-
-  //     }),
-  //   );
-  // });
-
   public addStocks$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ActionTypes.ADD_STOCKS),

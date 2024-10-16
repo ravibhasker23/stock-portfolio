@@ -9,7 +9,7 @@ export enum ActionTypes {
 
 export class AddStock implements IAction {
   readonly type: ActionTypes = ActionTypes.ADD_STOCKS;
-  constructor(public payload: any) {}
+  constructor(public payload: IAddStock) {}
 }
 
 export class AddStockSuccess implements IAction {

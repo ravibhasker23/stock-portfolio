@@ -27,10 +27,10 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     StoreModule.forRoot({ stock: StockReducer }), // Configure the root state with StockReducer
-    EffectsModule.forRoot([StockEffects]),// Register the root effects with StockEffects
+    EffectsModule.forRoot([StockEffects]), // Register the root effects with StockEffects
     FormsModule,
     RouterModule.forRoot(routes),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),  // Configure Store Devtools with a maximum age of 25 and log only in production mode
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }), // Configure Store Devtools with a maximum age of 25 and log only in production mode
   ],
   providers: [provideAnimationsAsync(), StockService],
   bootstrap: [AppComponent],

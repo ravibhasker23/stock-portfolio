@@ -23,7 +23,7 @@ export interface IStock {
 
 export interface IStockState {
   stocks: IStock[];
-  error: null;
+  error: string | null;
   loading: boolean;
 }
 
