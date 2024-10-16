@@ -1,68 +1,91 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { StoreModule, Store } from '@ngrx/store';
+import { StockListComponent } from './stock-list.component';
 import { IStockSelectState, Stock } from '../../store/stock-state.model';
-import {
-  AddStock,
-  errorSelector,
-  loadingSelector,
-  RemoveStock,
-  stocksSelector,
-} from '../../store';
+import { AddStock, RemoveStock, stocksReducer } from '../../store';
 import { NL_STOCKS, US_STOCKS } from '../../constants/stock.data';
+import { By } from '@angular/platform-browser';
 
-@Component({
-  selector: 'app-stock-list',
-  templateUrl: './stock-list.component.html',
-  styleUrl: './stock-list.component.scss',
-})
-export class StockListComponent implements OnInit {
-  stockForm!: FormGroup;
+describe('StockListComponent', () => {
+  let component: StockListComponent;
+  let fixture: ComponentFixture<StockListComponent>;
+  let store: Store<IStockSelectState>;
 
-  stocks$ = this.store.select(stocksSelector as any);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [StockListComponent],
+      imports: [
+        ReactiveFormsModule,
+        StoreModule.forRoot({ stock: stocksReducer }),
+      ],
+    }).compileComponents();
 
-  error$ = this.store.select(errorSelector as any);
+    store = TestBed.inject(Store);
+    fixture = TestBed.createComponent(StockListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-  loading$ = this.store.select(loadingSelector as any);
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  nlStocks: Stock[] = NL_STOCKS;
-  usStocks: Stock[] = US_STOCKS;
+  it('should initialize the form on ngOnInit', () => {
+    component.ngOnInit();
+    expect(component.stockForm).toBeDefined();
+    expect(component.stockForm.controls['vwdKey']).toBeDefined();
+    expect(component.stockForm.controls['numberOfContracts']).toBeDefined();
+    expect(component.stockForm.controls['buyValue']).toBeDefined();
+  });
 
-  selectedStockSymbol: string = '';
-  constructor(
-    private fb: FormBuilder,
-    private store: Store<IStockSelectState>,
-  ) {}
-
-  ngOnInit(): void {
-    this.stockForm = this.fb.group({
-      vwdKey: ['', Validators.required],
-      numberOfContracts: [null, [Validators.required, Validators.min(1)]],
-      buyValue: [null, [Validators.required, Validators.min(0)]],
+  it('should dispatch AddStock action when form is valid and addStock is called', () => {
+    spyOn(store, 'dispatch');
+    component.ngOnInit();
+    component.stockForm.setValue({
+      vwdKey: 'AAPL',
+      numberOfContracts: 10,
+      buyValue: 150,
     });
-  }
 
-  addStock(): void {
-    if (this.stockForm.valid) {
-      const { vwdKey, numberOfContracts, buyValue } = this.stockForm.value;
-      this.store.dispatch(
-        new AddStock({ vwdKey, numberOfContracts, buyValue }),
-      );
-      this.stockForm.reset();
-      this.selectedStockSymbol = '';
-    } else {
-      this.stockForm.controls['vwdKey'].markAsTouched();
-      this.stockForm.controls['numberOfContracts'].markAsTouched();
-      this.stockForm.controls['buyValue'].markAsTouched();
-    }
-  }
+    component.addStock();
 
-  removeStock(symbol: string) {
-    this.store.dispatch(new RemoveStock(symbol));
-  }
+    expect(store.dispatch).toHaveBeenCalledWith(
+      new AddStock({ vwdKey: 'AAPL', numberOfContracts: 10, buyValue: 150 })
+    );
+    expect(component.stockForm.valid).toBeTruthy();
+  });
 
-  onSelectStock(stock: Stock) {
-    this.stockForm.controls['vwdKey'].setValue(stock.symbol);
-    this.selectedStockSymbol = `${stock.symbol}`;
-  }
-}
+  it('should not dispatch AddStock action when form is invalid and addStock is called', () => {
+    spyOn(store, 'dispatch');
+    component.ngOnInit();
+    component.stockForm.setValue({
+      vwdKey: '',
+      numberOfContracts: null,
+      buyValue: null,
+    });
+
+    component.addStock();
+
+    expect(store.dispatch).not.toHaveBeenCalled();
+    expect(component.stockForm.valid).toBeFalsy();
+  });
+
+  it('should dispatch RemoveStock action when removeStock is called', () => {
+    spyOn(store, 'dispatch');
+    const symbol = 'AAPL';
+
+    component.removeStock(symbol);
+
+    expect(store.dispatch).toHaveBeenCalledWith(new RemoveStock(symbol));
+  });
+
+  it('should set selectedStockSymbol and form control value when onSelectStock is called', () => {
+    const stock: Stock = { symbol: 'AAPL', price: 150 };
+
+    component.onSelectStock(stock);
+
+    expect(component.selectedStockSymbol).toBe('AAPL');
+    expect(component.stockForm.controls['vwdKey'].value).toBe('AAPL');
+  });
+});
