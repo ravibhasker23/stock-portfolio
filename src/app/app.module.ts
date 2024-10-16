@@ -11,12 +11,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StockEffects, StockReducer } from './stock/store';
 import { StockService } from './stock/services/stock.service';
 
+// Define the routes for the application
 const routes: Routes = [
-  { path: '', redirectTo: '/stock', pathMatch: 'full' },
+  { path: '', redirectTo: '/stock', pathMatch: 'full' }, // Redirect root path to /stock
   {
     path: 'stock',
     loadChildren: () =>
-      import('./stock/stock.module').then((m) => m.StockModule),
+      import('./stock/stock.module').then((m) => m.StockModule), // Lazy load the StockModule
   },
 ];
 
@@ -25,11 +26,11 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    StoreModule.forRoot({ stock: StockReducer }),
-    EffectsModule.forRoot([StockEffects]),
+    StoreModule.forRoot({ stock: StockReducer }), // Configure the root state with StockReducer
+    EffectsModule.forRoot([StockEffects]),// Register the root effects with StockEffects
     FormsModule,
     RouterModule.forRoot(routes),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),  // Configure Store Devtools with a maximum age of 25 and log only in production mode
   ],
   providers: [provideAnimationsAsync(), StockService],
   bootstrap: [AppComponent],
