@@ -1,75 +1,85 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { StockPortfolioViewComponent } from './stock-portfolio-view.component';
+import { TotalPipe } from '../../pipes/total.pipe';
 import { IStock } from '../../store/stock-state.model';
 import * as Highcharts from 'highcharts';
-import { TotalPipe } from '../../pipes/total.pipe';
 
-@Component({
-  selector: 'app-stock-portfolio-view',
-  templateUrl: './stock-portfolio-view.component.html',
-  styleUrl: './stock-portfolio-view.component.scss',
-  providers: [TotalPipe],
-})
-export class StockPortfolioViewComponent implements OnChanges {
-  @Input()
-  stocks!: IStock[];
+describe('StockPortfolioViewComponent', () => {
+  let component: StockPortfolioViewComponent;
+  let fixture: ComponentFixture<StockPortfolioViewComponent>;
 
-  Highcharts: typeof Highcharts = Highcharts;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [StockPortfolioViewComponent],
+      providers: [TotalPipe],
+    }).compileComponents();
 
-  chartOptions: Highcharts.Options = {};
+    fixture = TestBed.createComponent(StockPortfolioViewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-  currentChartOptions: Highcharts.Options = {};
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  constructor(private totalPipe: TotalPipe) {}
+  it('should update chart options on input change', () => {
+    const stocks: IStock[] = [
+      { name: 'AAPL', buyValue: 150, currentValue: 160 },
+      { name: 'GOOGL', buyValue: 2800, currentValue: 2900 },
+    ];
 
-  ngOnChanges(): void {
-    this.updateChart();
-  }
+    component.stocks = stocks;
+    component.ngOnChanges();
 
-  updateChart() {
-    const boughtData = this.stocks.map((el) => ({
-      name: el.name,
-      y: Number(el.buyValue.toFixed(2)),
-    }));
+    expect(component.chartOptions.series.data).toEqual([
+      { name: 'AAPL', y: 150 },
+      { name: 'GOOGL', y: 2800 },
+    ]);
 
-    const currentData = this.stocks.map((el) => ({
-      name: el.name,
-      y: Number(el.currentValue.toFixed(2)),
-    }));
+    expect(component.currentChartOptions.series.data).toEqual([
+      { name: 'AAPL', y: 160 },
+      { name: 'GOOGL', y: 2900 },
+    ]);
+  });
 
-    let data = boughtData;
+  it('should set chart options correctly in updateChart method', () => {
+    const stocks: IStock[] = [
+      { name: 'AAPL', buyValue: 150, currentValue: 160 },
+      { name: 'GOOGL', buyValue: 2800, currentValue: 2900 },
+    ];
 
-    this.chartOptions = {
-      chart: {
-        type: 'pie',
-      },
-      title: {
-        text: 'Bought values',
-      },
+    component.stocks = stocks;
+    component.updateChart();
+
+    expect(component.chartOptions).toEqual({
+      chart: { type: 'pie' },
+      title: { text: 'Bought values' },
       series: [
         {
           name: 'Bought',
-          data,
+          data: [
+            { name: 'AAPL', y: 150 },
+            { name: 'GOOGL', y: 2800 },
+          ],
           type: 'pie',
         },
       ],
-    };
+    });
 
-    data = currentData;
-
-    this.currentChartOptions = {
-      chart: {
-        type: 'pie',
-      },
-      title: {
-        text: 'Current values',
-      },
+    expect(component.currentChartOptions).toEqual({
+      chart: { type: 'pie' },
+      title: { text: 'Current values' },
       series: [
         {
           name: 'Current',
-          data,
+          data: [
+            { name: 'AAPL', y: 160 },
+            { name: 'GOOGL', y: 2900 },
+          ],
           type: 'pie',
         },
       ],
-    };
-  }
-}
+    });
+  });
+});
