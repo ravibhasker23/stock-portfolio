@@ -17,6 +17,9 @@ export class StockListComponent implements OnInit {
   error$ = this.store.select(errorSelector as any);
 
   loading$ = this.store.select(loadingSelector as any);
+
+  nlStocks: Stock[] = NL_STOCKS;
+  usStocks: Stock[] = US_STOCKS;
   
   constructor(private fb: FormBuilder, private store: Store<IStockSelectState>){
 
